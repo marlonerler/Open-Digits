@@ -1,3 +1,4 @@
 # Open Digits
-Open Source and Extensible Localhost Server for Collaborative Use
-Documentatino will follow soon.
+Open Source and Extensible Localhost Server for Collaborative Use.
+
+**Documentation will follow soon.**
