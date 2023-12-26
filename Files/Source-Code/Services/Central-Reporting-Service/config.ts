@@ -1,13 +1,6 @@
-import * as Paths from "../../Utility/paths";
+import * as Paths from "../../Global/config";
 
 // Main
-export const mainDirectory: string = Paths.getServiceDataDirectory(
+export const CRSmainDirectory: string = Paths.getServiceDataDirectory(
     "Central-Reporting-Service",
 );
-
-export const chronologicalDirectoryName: string = "chronological";
-export const keysToGroupBy: string[] = [
-    "username",
-    "reportingService",
-    "category",
-];

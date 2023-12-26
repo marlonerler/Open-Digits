@@ -1,33 +1,38 @@
+import {
+    CRSFinalLogMessageObject,
+    CRSLogMessageCategories,
+    CRSLogMessageGroups,
+    CRSLogRequestData,
+} from "./types";
+
+import { CRSmainDirectory } from "./config";
 import Crypto from "node:crypto";
 import Fs from "node:fs/promises";
 import Path from "node:path";
-
-import * as Config from "./config";
-import * as Types from "./types";
+import { getSplitISOString } from "../../Global/utility";
 
 // Main
 /** logs message */
-export default function log(
-    message: string,
-    data?: Types.LogMessageData,
-): void {
-    // generate timestamp and id
-    const timestamp: string = new Date().toISOString();
+export default function log(data: CRSLogRequestData): void {
+    // get data
+    const message: string = data.message;
+    const username: string = data.username ?? "unknown";
+    const reportingService: string = data.reportingService ?? "unknown";
+    const category: CRSLogMessageCategories =
+        data?.category ?? CRSLogMessageCategories.Unknown;
+
+    // generate data
+    const { date, time } = getSplitISOString(new Date());
     const uuid: string = Crypto.randomUUID();
 
-    // get data
-    const username: string = data?.username ?? "unknown";
-    const reportingService: string = data?.reportingService ?? "unknown";
-    const category: Types.LogMessageCategories =
-        data?.category ?? Types.LogMessageCategories.Unknown;
-
     // build message object
-    const finalLogMessageObject: Types.FinalLogMessageObject = {
+    const finalLogMessageObject: CRSFinalLogMessageObject = {
         category,
         username,
         reportingService,
         message,
-        timestamp,
+        date,
+        time,
         uuid,
     };
 
@@ -38,24 +43,21 @@ export default function log(
 // Helpers
 /** writes log message to disk */
 async function processMessage(
-    finalLogMessageObject: Types.FinalLogMessageObject,
+    finalLogMessageObject: CRSFinalLogMessageObject,
 ): Promise<void> {
     // generate message id string to use as filename
     const messageId: string = generateMessageId(finalLogMessageObject);
     // stringify message
     const stringifiedMessage: string = stringifyMessage(finalLogMessageObject);
 
-    // store chronologically
-    const parentDir: string = Path.join(Config.mainDirectory, Config.chronologicalDirectoryName);
-    await storeLogMessage(stringifiedMessage, parentDir, messageId);
-
     // group messages by categories
     for (const [key, value] of Object.entries(finalLogMessageObject)) {
         // group messages only by select properties
-        if (!Config.keysToGroupBy.includes(key)) continue;
+        console.log(key, CRSLogMessageGroups);
+        if (key in CRSLogMessageGroups == false) continue;
 
         // store message
-        const parentDir: string = Path.join(Config.mainDirectory, key, value);
+        const parentDir: string = Path.join(CRSmainDirectory, key, value);
         await storeLogMessage(stringifiedMessage, parentDir, messageId);
     }
 }
@@ -81,14 +83,14 @@ async function storeLogMessage(
 
 /** joins timestamp and uuid */
 function generateMessageId(
-    finalLogMessageObject: Types.FinalLogMessageObject,
+    finalLogMessageObject: CRSFinalLogMessageObject,
 ): string {
-    return `${finalLogMessageObject.timestamp}-${finalLogMessageObject.uuid}`;
+    return `${finalLogMessageObject.date}-${finalLogMessageObject.time}-${finalLogMessageObject.uuid}`;
 }
 
 /** creates string from message object */
 function stringifyMessage(
-    finalLogMessageObject: Types.FinalLogMessageObject,
+    finalLogMessageObject: CRSFinalLogMessageObject,
 ): string {
     return JSON.stringify(finalLogMessageObject, null, 4);
 }
