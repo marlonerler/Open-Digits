@@ -1,6 +1,6 @@
-import * as Paths from "../../Global/config";
+import { Services, getServiceDataDirectory } from "../../Global/config";
 
 // Main
-export const CRSmainDirectory: string = Paths.getServiceDataDirectory(
-    "Central-Reporting-Service",
+export const CRSmainDirectory: string = getServiceDataDirectory(
+    Services.CRS,
 );

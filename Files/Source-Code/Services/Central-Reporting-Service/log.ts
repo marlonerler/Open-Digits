@@ -53,7 +53,6 @@ async function processMessage(
     // group messages by categories
     for (const [key, value] of Object.entries(finalLogMessageObject)) {
         // group messages only by select properties
-        console.log(key, CRSLogMessageGroups);
         if (key in CRSLogMessageGroups == false) continue;
 
         // store message

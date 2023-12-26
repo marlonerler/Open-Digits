@@ -2,8 +2,28 @@ import { ChildProcess, fork } from "child_process";
 
 import { MessageCodes } from "./config";
 
+// Types
 export type ServiceInitializer = (serviceRequest: ServiceRequest) => void;
 
+// Initialization
+export function initializeService(
+    serviceInitializer: ServiceInitializer,
+): void {
+    // receive first message (request)
+    process.once("message", (message: any) => {
+        // make sure message is service request
+        if ("requestType" in message == false)
+            throw MessageCodes.ErrorNotAServiceRequest;
+
+        // initialize
+        serviceInitializer(message as ServiceRequest);
+    });
+
+    // send ready
+    process.send!(MessageCodes.Ready);
+}
+
+// Requests
 export class ServiceRequest implements ServiceRequestData {
     readonly servicePath: string;
     requestType: any;
@@ -42,9 +62,7 @@ export class ServiceRequest implements ServiceRequestData {
         console.error(error);
     };
 
-    handleMessage = (message: any): void => {
-        console.log(message);
-    };
+    handleMessage = (message: any): void => {};
 
     handleClose = (): void => {};
 

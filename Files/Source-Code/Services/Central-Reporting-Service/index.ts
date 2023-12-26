@@ -1,8 +1,7 @@
 import { CRSLogRequest, CRSServiceRequests } from "./types";
+import { ServiceRequestData, initializeService } from "../../Global/services";
 
 import { MessageCodes } from "../../Global/config";
-import { ServiceRequestData } from "../../Global/services";
-import { initializeService } from "../../Global/utility";
 import log from "./log";
 
 initializeService((data: ServiceRequestData) => {

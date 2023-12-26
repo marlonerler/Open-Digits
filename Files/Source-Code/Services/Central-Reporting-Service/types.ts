@@ -1,3 +1,5 @@
+import { Services, getServiceCodeDirectory } from "../../Global/config";
+
 import { ServiceRequest } from "../../Global/services";
 
 // Requests
@@ -7,8 +9,7 @@ export enum CRSServiceRequests {
 }
 
 export class CRSRequest extends ServiceRequest {
-    servicePath =
-        "Files/Source-Code/Services/Central-Reporting-Service/index.ts";
+    servicePath = getServiceCodeDirectory(Services.CRS);
 }
 
 export class CRSLogRequest extends CRSRequest {
