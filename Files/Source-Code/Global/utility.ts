@@ -36,6 +36,10 @@ export function getSplitISOString(date: Date): { date: string; time: string } {
     };
 }
 
+export function replaceWhitespaces(text: string): string {
+    return text.replace(/ /g, '-');
+}
+
 export function writeWelcomeText(): void {
     console.log(`
  ______             ____  _____  ______ _   _                   

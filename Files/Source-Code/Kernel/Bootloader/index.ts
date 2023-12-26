@@ -1,5 +1,15 @@
-import { ColorTemplates, Colors } from "../Global/colors";
-import { ask, delay, writeSection, writeWelcomeText } from "../Global/utility";
+import { ColorTemplates, Colors } from "../../Global/colors";
+import {
+    ask,
+    delay,
+    writeSection,
+    writeWelcomeText,
+} from "../../Global/utility";
+
+import { BootloaderLog } from "./helpers";
+import { CRSLogProcessManager } from "../../Services/Central-Reporting-Service/types";
+import { ReservedUsernames } from "../../Global/config";
+import { Services } from "../../Global/services";
 
 // Main
 export default async function main(): Promise<void> {
@@ -7,8 +17,11 @@ export default async function main(): Promise<void> {
     writeWelcomeText();
     await delay(1000);
 
+    BootloaderLog("Starting up...");
+
     // setup
     const password = await getCentralEncryptionPassphrase();
+    BootloaderLog("Received Central Encryption Passphrase");
 }
 
 // Helpers
@@ -52,7 +65,7 @@ ${ColorTemplates.Highlight}If you forgot the Passphrase${Colors.Reset}, enter a 
         doPassphrasesMatch = true;
         passphrase = passphraseFirstEntry;
 
-        console.log(`${Colors.FgGreen}Thank you!${Colors.Reset}`)
+        console.log(`${Colors.FgGreen}Thank you!${Colors.Reset}`);
     }
 
     return passphrase;
