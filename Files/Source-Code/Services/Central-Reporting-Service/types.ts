@@ -1,3 +1,4 @@
+/** categories for log messages */
 export enum LogMessageCategories {
     Activity = "Activity",
     Warning = "Warning",
