@@ -3,4 +3,5 @@ export const keysToGroupBy: string[] = [
     "username",
     "reportingService",
     "timestamp",
+    "category",
 ];

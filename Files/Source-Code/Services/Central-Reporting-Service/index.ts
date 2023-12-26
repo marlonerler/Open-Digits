@@ -9,10 +9,18 @@ import { crashWithError } from "../../Utility/errorHandling";
 Fs.mkdir(Config.mainDirectory, { recursive: true }).catch(crashWithError);
 
 // Types
+export enum LogMessageCategories {
+    Activity = "Activity",
+    Warning = "Warning",
+    Error = "Error",
+    Unknown = "Unknown",
+}
+
 /** additional information to write alongside message */
 export interface LogMessageData {
     username?: string;
     reportingService?: string;
+    category?: LogMessageCategories;
 }
 
 /** object containing all information to write */
@@ -28,10 +36,12 @@ export function log(message: string, data?: LogMessageData): void {
     const timestamp: string = new Date().toISOString();
     const uuid: string = Crypto.randomUUID();
 
-    const username = data?.username ?? "unknown";
-    const reportingService = data?.reportingService ?? "unknown";
+    const username: string = data?.username ?? "unknown";
+    const reportingService: string = data?.reportingService ?? "unknown";
+    const category: LogMessageCategories = data?.category ?? LogMessageCategories.Unknown;
 
     const finalLogMessageObject: FinalLogMessageObject = {
+        category,
         username,
         reportingService,
         message,
