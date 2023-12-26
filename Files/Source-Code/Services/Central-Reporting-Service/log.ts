@@ -4,14 +4,6 @@ import Path from "node:path";
 
 import * as Config from "./config";
 import * as Types from "./types";
-import * as ErrorHandling from "../../Utility/errorHandling";
-
-// Repair
-export async function repair() {
-    Fs.mkdir(Config.mainDirectory, { recursive: true }).catch(
-        ErrorHandling.crashWithError,
-    );
-}
 
 // Main
 /** logs message */
@@ -19,14 +11,17 @@ export default function log(
     message: string,
     data?: Types.LogMessageData,
 ): void {
+    // generate timestamp and id
     const timestamp: string = new Date().toISOString();
     const uuid: string = Crypto.randomUUID();
 
+    // get data
     const username: string = data?.username ?? "unknown";
     const reportingService: string = data?.reportingService ?? "unknown";
     const category: Types.LogMessageCategories =
         data?.category ?? Types.LogMessageCategories.Unknown;
 
+    // build message object
     const finalLogMessageObject: Types.FinalLogMessageObject = {
         category,
         username,
@@ -35,16 +30,19 @@ export default function log(
         timestamp,
         uuid,
     };
-    prepareToWriteMessage(finalLogMessageObject);
+
+    // process message
+    processMessage(finalLogMessageObject);
 }
 
 // Helpers
 /** writes log message to disk */
-async function prepareToWriteMessage(
+async function processMessage(
     finalLogMessageObject: Types.FinalLogMessageObject,
 ): Promise<void> {
-    // generate message id to use as filename
+    // generate message id string to use as filename
     const messageId: string = generateMessageId(finalLogMessageObject);
+    // stringify message
     const stringifiedMessage: string = stringifyMessage(finalLogMessageObject);
 
     // store chronologically
@@ -81,12 +79,14 @@ async function storeLogMessage(
     }
 }
 
+/** joins timestamp and uuid */
 function generateMessageId(
     finalLogMessageObject: Types.FinalLogMessageObject,
 ): string {
     return `${finalLogMessageObject.timestamp}-${finalLogMessageObject.uuid}`;
 }
 
+/** creates string from message object */
 function stringifyMessage(
     finalLogMessageObject: Types.FinalLogMessageObject,
 ): string {
