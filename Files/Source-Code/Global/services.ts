@@ -32,7 +32,7 @@ export class ServiceProcessManager implements ServiceProcessData {
     private didLaunch: boolean = false;
 
     // methods
-    launch = (): void => {
+    launchProcess = (): void => {
         if (!(this.servicePath && this.requestType))
             return console.error(MessageCodes.ErrorIncompleteServiceRequest);
 
