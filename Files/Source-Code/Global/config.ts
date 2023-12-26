@@ -1,4 +1,5 @@
 import Path from "path";
+import { Services } from "./services";
 
 // Directories
 export const fileDirectory: string = "Files";
@@ -9,21 +10,6 @@ export function getServiceDataDirectory(service: Services): string {
 }
 export function getServiceCodeDirectory(service: Services): string {
     return Path.join(codeDirectory, "Services", service, "index.ts");
-}
-
-export enum Services {
-    AMS = "App Management Service",
-    ASP = "Automated Server Protection",
-    AUP = "Automated User Protection",
-    Bootloader = "Bootloader",
-    CAA = "Central Account Administration",
-    CRS = "Central Reporting Service",
-    Guard = "Guard",
-    MSG = "Messaging Service",
-    OA = "Organization Administration",
-    PA = "Pass Administration",
-    SAS = "Server Administration Service",
-    Server = "Server",
 }
 
 // IPC

@@ -1,6 +1,6 @@
-import { Services, getServiceCodeDirectory } from "../../Global/config";
+import { ServiceProcessManager, Services } from "../../Global/services";
 
-import { ServiceProcessManager } from "../../Global/services";
+import { getServiceCodeDirectory } from "../../Global/config";
 
 // Requests
 export enum CRSProcessTypes {
@@ -47,7 +47,7 @@ export enum CRSLogMessageCategories {
 export interface CRSLogProcessData {
     message: string;
     username?: string;
-    reportingService?: string;
+    reportingService?: Services;
     category?: CRSLogMessageCategories;
 }
 

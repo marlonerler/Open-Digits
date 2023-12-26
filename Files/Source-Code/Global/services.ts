@@ -5,6 +5,22 @@ import { MessageCodes } from "./config";
 // Types
 export type ServiceProcessInitializer = (serviceRequest: ServiceProcessManager) => void;
 
+export enum Services {
+    AMS = "App Management Service",
+    ASP = "Automated Server Protection",
+    AUP = "Automated User Protection",
+    Bootloader = "Bootloader",
+    CAA = "Central Account Administration",
+    CRS = "Central Reporting Service",
+    Documentation = "Documentation",
+    Guard = "Guard",
+    MSG = "Messaging Service",
+    OA = "Organization Administration",
+    PA = "Pass Administration",
+    SAS = "Server Administration Service",
+    Server = "Server",
+}
+
 // Initialization
 export function initializeServiceProcess(
     initialize: ServiceProcessInitializer,
