@@ -1,8 +1,8 @@
 import {
     CRSFinalLogMessageObject,
     CRSLogMessageCategories,
-    CRSLogMessageGroups,
-    CRSLogRequestData,
+    CRSLogMessageFilters,
+    CRSLogProcessData,
 } from "./types";
 
 import { CRSmainDirectory } from "./config";
@@ -13,7 +13,7 @@ import { getSplitISOString } from "../../Global/utility";
 
 // Main
 /** logs message */
-export default function log(data: CRSLogRequestData): void {
+export default function log(data: CRSLogProcessData): void {
     // get data
     const message: string = data.message;
     const username: string = data.username ?? "unknown";
@@ -50,10 +50,10 @@ async function processMessage(
     // stringify message
     const stringifiedMessage: string = stringifyMessage(finalLogMessageObject);
 
-    // group messages by categories
+    // store messages
     for (const [key, value] of Object.entries(finalLogMessageObject)) {
-        // group messages only by select properties
-        if (key in CRSLogMessageGroups == false) continue;
+        // group messages only by select filters
+        if (key in CRSLogMessageFilters == false) continue;
 
         // store message
         const parentDir: string = Path.join(CRSmainDirectory, key, value);

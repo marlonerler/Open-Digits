@@ -1,12 +1,12 @@
-import { CRSLogRequest, CRSServiceRequests } from "./types";
-import { ServiceRequestData, initializeService } from "../../Global/services";
+import { CRSLogProcessManager, CRSProcessTypes } from "./types";
+import { ServiceProcessData, initializeServiceProcess } from "../../Global/services";
 
 import { MessageCodes } from "../../Global/config";
 import log from "./log";
 
-initializeService((data: ServiceRequestData) => {
-    if (data.requestType == CRSServiceRequests.Log) {
-        const logRequest: CRSLogRequest = data as CRSLogRequest;
+initializeServiceProcess((data: ServiceProcessData) => {
+    if (data.requestType == CRSProcessTypes.Log) {
+        const logRequest: CRSLogProcessManager = data as CRSLogProcessManager;
         log(logRequest.requestData);
     } else {
         throw MessageCodes.ErrorInvalidServiceRequest;

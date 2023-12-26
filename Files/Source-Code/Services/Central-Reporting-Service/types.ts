@@ -1,33 +1,33 @@
 import { Services, getServiceCodeDirectory } from "../../Global/config";
 
-import { ServiceRequest } from "../../Global/services";
+import { ServiceProcessManager } from "../../Global/services";
 
 // Requests
-export enum CRSServiceRequests {
+export enum CRSProcessTypes {
     Log = "crs-log-request",
     Access = "crs-access-request",
 }
 
-export class CRSRequest extends ServiceRequest {
+export class CRSProcessManager extends ServiceProcessManager {
     servicePath = getServiceCodeDirectory(Services.CRS);
 }
 
-export class CRSLogRequest extends CRSRequest {
-    requestType = CRSServiceRequests.Log;
-    constructor(public requestData: CRSLogRequestData) {
+export class CRSLogProcessManager extends CRSProcessManager {
+    requestType = CRSProcessTypes.Log;
+    constructor(public requestData: CRSLogProcessData) {
         super();
     }
 }
 
-export class CRSAccessRequest extends CRSRequest {
-    requestType = CRSServiceRequests.Access;
-    constructor(public requestData: CRSAccessRequestData) {
+export class CRSAccessProcessManager extends CRSProcessManager {
+    requestType = CRSProcessTypes.Access;
+    constructor(public requestData: CRSAccessProcessData) {
         super();
     }
 }
 
 // General
-export enum CRSLogMessageGroups {
+export enum CRSLogMessageFilters {
     category = "category",
     date = "date",
     username = "username",
@@ -44,7 +44,7 @@ export enum CRSLogMessageCategories {
 }
 
 /** additional information to write alongside message */
-export interface CRSLogRequestData {
+export interface CRSLogProcessData {
     message: string;
     username?: string;
     reportingService?: string;
@@ -52,7 +52,7 @@ export interface CRSLogRequestData {
 }
 
 /** object containing all information to write */
-export interface CRSFinalLogMessageObject extends CRSLogRequestData {
+export interface CRSFinalLogMessageObject extends CRSLogProcessData {
     date: string;
     time: string;
     uuid: string;
@@ -60,8 +60,8 @@ export interface CRSFinalLogMessageObject extends CRSLogRequestData {
 
 // Access
 /** defines what logs to obtain */
-export interface CRSAccessRequestData {
-    groupToSearch: CRSLogMessageGroups;
+export interface CRSAccessProcessData {
+    groupToSearch: CRSLogMessageFilters;
     groupMemberToSearch: string;
     reverseIndexOfFirstMessage?: number;
     maxAmountOfMessages?: number;

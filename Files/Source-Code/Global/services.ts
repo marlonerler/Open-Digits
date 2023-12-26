@@ -3,11 +3,11 @@ import { ChildProcess, fork } from "child_process";
 import { MessageCodes } from "./config";
 
 // Types
-export type ServiceInitializer = (serviceRequest: ServiceRequest) => void;
+export type ServiceProcessInitializer = (serviceRequest: ServiceProcessManager) => void;
 
 // Initialization
-export function initializeService(
-    serviceInitializer: ServiceInitializer,
+export function initializeServiceProcess(
+    initialize: ServiceProcessInitializer,
 ): void {
     // receive first message (request)
     process.once("message", (message: any) => {
@@ -16,7 +16,7 @@ export function initializeService(
             throw MessageCodes.ErrorNotAServiceRequest;
 
         // initialize
-        serviceInitializer(message as ServiceRequest);
+        initialize(message as ServiceProcessManager);
     });
 
     // send ready
@@ -24,7 +24,7 @@ export function initializeService(
 }
 
 // Requests
-export class ServiceRequest implements ServiceRequestData {
+export class ServiceProcessManager implements ServiceProcessData {
     readonly servicePath: string;
     requestType: any;
     requestData: any;
@@ -50,7 +50,7 @@ export class ServiceRequest implements ServiceRequestData {
         childProcess.on("message", (message: any) => {
             // send requestData when ready
             if (message == MessageCodes.Ready) {
-                childProcess.send(this.toServiceRequestObject());
+                childProcess.send(this.toServiceProcessData());
                 // forward messages
             } else {
                 this.handleMessage(message);
@@ -66,7 +66,7 @@ export class ServiceRequest implements ServiceRequestData {
 
     handleClose = (): void => {};
 
-    toServiceRequestObject = (): ServiceRequestData => {
+    toServiceProcessData = (): ServiceProcessData => {
         return {
             servicePath: this.servicePath,
             requestType: this.requestType,
@@ -75,7 +75,7 @@ export class ServiceRequest implements ServiceRequestData {
     };
 }
 
-export interface ServiceRequestData {
+export interface ServiceProcessData {
     readonly servicePath: string;
     requestType: any;
     requestData: any;
