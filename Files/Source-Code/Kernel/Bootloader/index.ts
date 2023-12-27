@@ -7,9 +7,6 @@ import {
 } from "../../Global/utility";
 
 import { BootloaderLog } from "./helpers";
-import { CRSLogProcessManager } from "../../Services/Central-Reporting-Service/types";
-import { ReservedUsernames } from "../../Global/config";
-import { Services } from "../../Global/services";
 
 // Main
 export default async function main(): Promise<void> {
